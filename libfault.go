@@ -71,12 +71,6 @@ func (c *Fault) Wrap(err error, skipFramesDelta int, w ...Wrapper) error {
 	return containerErr
 }
 
-// Wrap is a package-level convenience function that creates a default Config and calls Wrap.
-func Wrap(err error, w ...Wrapper) error {
-	config := &Fault{}
-	return config.Wrap(err, 0, w...)
-}
-
 type container struct {
 	cause    error
 	location string
