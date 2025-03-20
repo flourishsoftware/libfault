@@ -37,6 +37,10 @@ type Fault struct {
 	// ChainDeduplicationMode allows to select a strategy for messages deduplication in the Chain
 	// when building a final error message.
 	ChainDeduplicationMode ChainMessageDeduplicationMode
+
+	// AllowWrapperToDiscardError allows to "nillify" an error by a Wrapper that returns nil.
+	// By default we do not discarn an error in such situation.
+	AllowWrapperToDiscardError bool
 }
 
 // Wrapper describes a kind of middleware that packages can satisfy in order to
@@ -63,6 +67,9 @@ func (c *Fault) Wrap(err error, skipFramesDelta int, w ...Wrapper) error {
 
 	for _, fn := range w {
 		err = fn(err)
+		if err == nil && c.AllowWrapperToDiscardError {
+			return nil
+		}
 	}
 
 	containerErr := &container{
