@@ -49,7 +49,13 @@ func WithDesc(internal, description string) func(error) error {
 }
 
 // Error satisfies the error interface by returning the internal error message.
-func (e *withMessage) Error() string { return e.internal }
+// If internal message is not available, returns external message.
+func (e *withMessage) Error() string {
+	if e.internal == "" {
+		return e.external
+	}
+	return e.internal
+}
 
 // Unwrap satisfies the errors unwrap interface.
 func (e *withMessage) Unwrap() error { return e.underlying }

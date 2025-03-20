@@ -44,3 +44,8 @@ func TestWithManySlice(t *testing.T) {
 	assert.Len(t, out, 3)
 	assert.Equal(t, []string{"Your reply draft has been saved however we could not publish it.", "Unable to reply to post.", "The post was not found."}, out)
 }
+
+func TestInternalMessageFallback(t *testing.T) {
+	err := fmsg.Wrap(errors.New("underlying"), "", "External message.")
+	assert.Equal(t, "External message.", err.Error())
+}
