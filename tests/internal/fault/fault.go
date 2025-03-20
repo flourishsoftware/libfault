@@ -6,7 +6,7 @@ import (
 
 var fault = libfault.Fault{
 	// Use default error message formatter
-	FormatErrorMessage: nil,
+	BuildDefaultErrorMessage: nil,
 
 	// Use default location getter
 	GetLocation: nil,

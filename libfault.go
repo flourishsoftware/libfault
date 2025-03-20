@@ -25,8 +25,11 @@ const (
 
 // Fault allows customization of error formatting, location determination etc.
 type Fault struct {
-	// FormatErrorMessage allows customizing how error messages are formatted.
-	FormatErrorMessage func(chain Chain) string
+	// BuildDefaultErrorMessage allows customizing how error messages are formatted by default.
+	BuildDefaultErrorMessage func(chain Chain) string
+
+	// FormatErrorMessage allows customizing how errors are formatted when using fmt package, such as fmt.Sprintf("%+v", err)
+	FormatErrorMessage func(chain Chain, s fmt.State, verb rune)
 
 	// GetLocation overrides the default getLocation function.
 	GetLocation func(skipFramesDelta int) string
@@ -84,8 +87,8 @@ type container struct {
 func (f *container) Error() string {
 	chain := f.config.Flatten(f)
 
-	if f.config != nil && f.config.FormatErrorMessage != nil {
-		return f.config.FormatErrorMessage(chain)
+	if f.config != nil && f.config.BuildDefaultErrorMessage != nil {
+		return f.config.BuildDefaultErrorMessage(chain)
 	}
 
 	errs := []string{}
@@ -109,6 +112,10 @@ func (f *container) Error() string {
 func (f *container) Unwrap() error { return f.cause }
 
 func (f *container) Format(s fmt.State, verb rune) {
+	if f.config != nil && f.config.FormatErrorMessage != nil {
+		f.config.FormatErrorMessage(f.config.Flatten(f), s, verb)
+		return
+	}
 	switch verb {
 	case 'v':
 		if s.Flag('+') {
