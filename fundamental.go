@@ -1,12 +1,13 @@
-package fault
+package libfault
 
 import "fmt"
 
 // New creates a new basic fault error.
-func New(message string, w ...Wrapper) error {
+func (c *Config) New(message string, skipFramesDelta int, w ...Wrapper) error {
 	f := &fundamental{
 		msg:      message,
-		location: getLocation(),
+		location: c.getLocation(skipFramesDelta),
+		config:   c,
 	}
 
 	var err error = f
@@ -17,18 +18,32 @@ func New(message string, w ...Wrapper) error {
 	return err
 }
 
+// New is a package-level convenience function that creates a default Config and calls New.
+func New(message string, w ...Wrapper) error {
+	config := &Config{}
+	return config.New(message, 0, w...)
+}
+
 // Newf includes formatting specifiers.
-func Newf(message string, va ...any) error {
+func (c *Config) Newf(message string, skipFramesDelta int, va ...any) error {
 	f := &fundamental{
 		msg:      fmt.Sprintf(message, va...),
-		location: getLocation(),
+		location: c.getLocation(skipFramesDelta),
+		config:   c,
 	}
 	return f
+}
+
+// Newf is a package-level convenience function that creates a default Config and calls Newf.
+func Newf(message string, va ...any) error {
+	config := &Config{}
+	return config.Newf(message, 0, va...)
 }
 
 type fundamental struct {
 	msg      string
 	location string
+	config   *Config
 }
 
 func (f *fundamental) Error() string {

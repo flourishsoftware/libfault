@@ -5,7 +5,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/Southclaws/fault/fctx"
+	"github.com/Southclaws/libfault/fctx"
 	"github.com/kr/pretty"
 	"github.com/stretchr/testify/assert"
 )

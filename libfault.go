@@ -1,9 +1,9 @@
-// Package fault provides an extensible yet ergonomic mechanism for wrapping
+// Package libfault provides an extensible yet ergonomic mechanism for wrapping
 // errors. It implements this as a kind of middleware style pattern by providing
 // a simple option-style interface that can be passed to a call to `fault.Wrap`.
 //
 // See the GitHub repository for full documentation and examples.
-package fault
+package libfault
 
 import (
 	"fmt"
@@ -11,12 +11,21 @@ import (
 	"strings"
 )
 
+// Config allows customization of error formatting and location determination.
+type Config struct {
+	// FormatErrorMessage allows customizing how error messages are formatted.
+	FormatErrorMessage func(chain Chain) string
+
+	// GetLocation overrides the default getLocation function.
+	GetLocation func(skipFramesDelta int) string
+}
+
 // Wrapper describes a kind of middleware that packages can satisfy in order to
 // decorate errors with additional, domain-specific context.
 type Wrapper func(err error) error
 
 // Wrap wraps an error with all of the wrappers provided.
-func Wrap(err error, w ...Wrapper) error {
+func (c *Config) Wrap(err error, skipFramesDelta int, w ...Wrapper) error {
 	if err == nil {
 		return nil
 	}
@@ -29,6 +38,7 @@ func Wrap(err error, w ...Wrapper) error {
 		err = &container{
 			cause:    err,
 			location: "",
+			config:   c,
 		}
 	}
 
@@ -36,17 +46,25 @@ func Wrap(err error, w ...Wrapper) error {
 		err = fn(err)
 	}
 
-	c := &container{
+	containerErr := &container{
 		cause:    err,
-		location: getLocation(),
+		location: c.getLocation(skipFramesDelta),
+		config:   c,
 	}
 
-	return c
+	return containerErr
+}
+
+// Wrap is a package-level convenience function that creates a default Config and calls Wrap.
+func Wrap(err error, w ...Wrapper) error {
+	config := &Config{}
+	return config.Wrap(err, 0, w...)
 }
 
 type container struct {
 	cause    error
 	location string
+	config   *Config
 }
 
 // Error behaves like most error wrapping libraries, it gives you all the error
@@ -54,8 +72,13 @@ type container struct {
 // never show this to an end-user or include it in responses as it may reveal
 // internal technical information about your application stack.
 func (f *container) Error() string {
-	errs := []string{}
 	chain := Flatten(f)
+
+	if f.config != nil && f.config.FormatErrorMessage != nil {
+		return f.config.FormatErrorMessage(chain)
+	}
+
+	errs := []string{}
 
 	// reverse iterate since the chain is in caller order
 	for i := len(chain) - 1; i >= 0; i-- {
@@ -98,9 +121,25 @@ func (f *container) Format(s fmt.State, verb rune) {
 	}
 }
 
-func getLocation() string {
+// getLocation returns the file and line where the error occurred.
+func (c *Config) getLocation(skipFramesDelta int) string {
+	if c != nil && c.GetLocation != nil {
+		return c.GetLocation(skipFramesDelta)
+	}
+
+	return defaultGetLocation(skipFramesDelta)
+}
+
+// defaultGetLocation is the default implementation of getLocation.
+func defaultGetLocation(skipFramesDelta int) string {
 	pc := make([]uintptr, 1)
-	runtime.Callers(3, pc)
+	// +3 because:
+	// 0: defaultGetLocation
+	// 1: c.getLocation
+	// 2: Calling function (Wrap/New)
+	// 3: User code
+	// +skipFramesDelta to adjust for additional wrappers
+	runtime.Callers(3+skipFramesDelta, pc)
 	cf := runtime.CallersFrames(pc)
 	f, _ := cf.Next()
 

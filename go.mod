@@ -1,4 +1,4 @@
-module github.com/Southclaws/fault
+module github.com/Southclaws/libfault
 
 go 1.18
 
