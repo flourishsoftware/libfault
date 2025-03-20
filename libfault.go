@@ -140,6 +140,10 @@ func (f *container) Format(s fmt.State, verb rune) {
 			}
 			return
 		}
+		if s.Flag('#') {
+			fmt.Fprintf(s, "&container{cause: %#v, location: %#v}", f.cause, f.location)
+			return
+		}
 
 		fallthrough
 
