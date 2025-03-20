@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/Southclaws/fault"
-	"github.com/Southclaws/fault/fctx"
-	"github.com/Southclaws/fault/ftag"
+	"github.com/Southclaws/libfault/fctx"
+	"github.com/Southclaws/libfault/ftag"
+	"github.com/Southclaws/libfault/tests/internal/fault"
 	"github.com/stretchr/testify/assert"
 )
 

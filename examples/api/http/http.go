@@ -3,14 +3,15 @@ package http
 import (
 	"context"
 	"fmt"
-	"github.com/Southclaws/fault/fctx"
-	"github.com/Southclaws/fault/fmsg"
-	"github.com/Southclaws/fault/ftag"
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 	"log/slog"
 	"net/http"
 	"time"
+
+	"github.com/Southclaws/libfault/fctx"
+	"github.com/Southclaws/libfault/fmsg"
+	"github.com/Southclaws/libfault/ftag"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 )
 
 // Adding requestID in the fault context for logging purpose

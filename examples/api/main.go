@@ -2,15 +2,16 @@ package main
 
 import (
 	"fmt"
+	"log/slog"
+	"net/http"
+
 	"github.com/Southclaws/fault"
-	apihttp "github.com/Southclaws/fault/examples/api/http"
-	"github.com/Southclaws/fault/fmsg"
-	"github.com/Southclaws/fault/ftag"
+	apihttp "github.com/Southclaws/libfault/examples/api/http"
+	"github.com/Southclaws/libfault/fmsg"
+	"github.com/Southclaws/libfault/ftag"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/go-chi/render"
-	"log/slog"
-	"net/http"
 )
 
 var ExistingUserID = "123"

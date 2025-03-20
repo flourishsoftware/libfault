@@ -1,8 +1,8 @@
 ![header](./docs/header.png)
 
-[![GoDoc](https://pkg.go.dev/badge/github.com/Southclaws/fault)](https://pkg.go.dev/github.com/Southclaws/fault?tab=doc)
-[![Go Report Card](https://goreportcard.com/badge/github.com/Southclaws/fault)](https://goreportcard.com/report/github.com/Southclaws/fault)
-[![codecov](https://codecov.io/gh/Southclaws/fault/branch/main/graph/badge.svg?token=U06OABVKm3)](https://codecov.io/gh/Southclaws/fault)
+[![GoDoc](https://pkg.go.dev/badge/github.com/Southclaws/libfault)](https://pkg.go.dev/github.com/Southclaws/libfault?tab=doc)
+[![Go Report Card](https://goreportcard.com/badge/github.com/Southclaws/libfault)](https://goreportcard.com/report/github.com/Southclaws/libfault)
+[![codecov](https://codecov.io/gh/Southclaws/libfault/branch/main/graph/badge.svg?token=U06OABVKm3)](https://codecov.io/gh/Southclaws/libfault)
 
 Fault provides an extensible yet ergonomic mechanism for wrapping errors. It implements this as a kind of middleware style pattern of simple functions called **decorators**: `func(error) error`. A decorator simply wraps an error within another error, much like many libraries do.
 
