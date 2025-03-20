@@ -160,13 +160,13 @@ func (c *Fault) getLocation(skipFramesDelta int) string {
 // defaultGetLocation is the default implementation of getLocation.
 func defaultGetLocation(skipFramesDelta int) string {
 	pc := make([]uintptr, 1)
-	// +3 because:
-	// 0: defaultGetLocation
-	// 1: c.getLocation
-	// 2: Calling function (Wrap/New)
-	// 3: User code
+	// +4 because:
+	// 1: defaultGetLocation
+	// 2: c.getLocation
+	// 3: Calling function (Wrap/New)
+	// 4: User code
 	// +skipFramesDelta to adjust for additional wrappers
-	runtime.Callers(3+skipFramesDelta, pc)
+	runtime.Callers(4+skipFramesDelta, pc)
 	cf := runtime.CallersFrames(pc)
 	f, _ := cf.Next()
 

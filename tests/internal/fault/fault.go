@@ -14,7 +14,7 @@ var fault = libfault.Fault{
 
 type Wrapper = libfault.Wrapper
 
-const callStackDelta = 2
+const callStackDelta = 1
 
 // New creates a new error with the given message and optional wrappers
 func New(msg string, wrappers ...Wrapper) error {
