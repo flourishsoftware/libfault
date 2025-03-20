@@ -22,35 +22,20 @@ type withMessage struct {
 // message is intended for display to the end-user. It's recommended to use full
 // punctuation and grammar and end the message with a period.
 // external will be used as internal if internal is an empty string.
+// Two consecutive wraps will be squashed together - last message wins.
 func Wrap(err error, internal, external string) error {
 	if err == nil {
 		return nil
 	}
 
-	var unwrapped = err
-	const limitJustInCase = 100
-	for range limitJustInCase {
-		// If we found the withMassage on top of the current container, just overwrite the messages.
-		if wmsg, ok := unwrapped.(*withMessage); ok {
-			if external != "" {
-				wmsg.external = external
-			}
-			if internal != "" {
-				wmsg.internal = internal
-			}
-			return err
+	if wmsg, ok := err.(*withMessage); ok {
+		if external != "" {
+			wmsg.external = external
 		}
-
-		unwrapped = errors.Unwrap(unwrapped)
-		if unwrapped == nil {
-			break
+		if internal != "" {
+			wmsg.internal = internal
 		}
-
-		// If we reached the parent container - this is the first time
-		// message is added, so just wrap the error into withMessage.
-		if _, ok := unwrapped.(interface{ IsFaultContainer() }); ok {
-			break
-		}
+		return err
 	}
 
 	return &withMessage{
@@ -79,7 +64,7 @@ func WithDesc(internal, description string) func(error) error {
 // If internal message is not available, returns external message.
 func (e *withMessage) Error() string {
 	if e.internal == "" {
-		return e.external
+		return strings.TrimRight(e.external, ".")
 	}
 	return e.internal
 }
