@@ -21,7 +21,7 @@ type Step struct {
 // Flatten attempts to derive more useful structured information from an error
 // chain. If the input is a fault error, the output will contain an easy to use
 // error chain list with location information and individual error messages.
-func (c *Config) Flatten(err error) Chain {
+func (c *Fault) Flatten(err error) Chain {
 	if err == nil {
 		return nil
 	}

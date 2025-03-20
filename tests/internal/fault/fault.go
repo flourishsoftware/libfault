@@ -4,7 +4,7 @@ import (
 	"github.com/Southclaws/libfault"
 )
 
-var fault = libfault.Config{
+var fault = libfault.Fault{
 	// Use default error message formatter
 	FormatErrorMessage: nil,
 

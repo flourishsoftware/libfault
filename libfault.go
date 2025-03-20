@@ -23,8 +23,8 @@ const (
 	ChainMessageDeduplicationModeSubstringMatch
 )
 
-// Config allows customization of error formatting and location determination.
-type Config struct {
+// Fault allows customization of error formatting and location determination.
+type Fault struct {
 	// FormatErrorMessage allows customizing how error messages are formatted.
 	FormatErrorMessage func(chain Chain) string
 
@@ -39,7 +39,7 @@ type Config struct {
 type Wrapper func(err error) error
 
 // Wrap wraps an error with all of the wrappers provided.
-func (c *Config) Wrap(err error, skipFramesDelta int, w ...Wrapper) error {
+func (c *Fault) Wrap(err error, skipFramesDelta int, w ...Wrapper) error {
 	if err == nil {
 		return nil
 	}
@@ -71,14 +71,14 @@ func (c *Config) Wrap(err error, skipFramesDelta int, w ...Wrapper) error {
 
 // Wrap is a package-level convenience function that creates a default Config and calls Wrap.
 func Wrap(err error, w ...Wrapper) error {
-	config := &Config{}
+	config := &Fault{}
 	return config.Wrap(err, 0, w...)
 }
 
 type container struct {
 	cause    error
 	location string
-	config   *Config
+	config   *Fault
 }
 
 // Error behaves like most error wrapping libraries, it gives you all the error
@@ -136,7 +136,7 @@ func (f *container) Format(s fmt.State, verb rune) {
 }
 
 // getLocation returns the file and line where the error occurred.
-func (c *Config) getLocation(skipFramesDelta int) string {
+func (c *Fault) getLocation(skipFramesDelta int) string {
 	if c != nil && c.GetLocation != nil {
 		return c.GetLocation(skipFramesDelta)
 	}
