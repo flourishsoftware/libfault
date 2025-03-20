@@ -11,6 +11,18 @@ import (
 	"strings"
 )
 
+type ChainMessageDeduplicationMode uint8
+
+const (
+	// ChainMessageDeduplicationModeExactMatch is the default mode.
+	// Messages are de-duplicated on exact match only.
+	ChainMessageDeduplicationModeExactMatch ChainMessageDeduplicationMode = iota
+
+	// ChainMessageDeduplicationModeSubstringMatch will de-duplicate shared prefix
+	// in subsequent error messages in the chain.
+	ChainMessageDeduplicationModeSubstringMatch
+)
+
 // Config allows customization of error formatting and location determination.
 type Config struct {
 	// FormatErrorMessage allows customizing how error messages are formatted.
@@ -18,6 +30,8 @@ type Config struct {
 
 	// GetLocation overrides the default getLocation function.
 	GetLocation func(skipFramesDelta int) string
+
+	ChainDeduplicationMode ChainMessageDeduplicationMode
 }
 
 // Wrapper describes a kind of middleware that packages can satisfy in order to
@@ -72,7 +86,7 @@ type container struct {
 // never show this to an end-user or include it in responses as it may reveal
 // internal technical information about your application stack.
 func (f *container) Error() string {
-	chain := Flatten(f)
+	chain := f.config.Flatten(f)
 
 	if f.config != nil && f.config.FormatErrorMessage != nil {
 		return f.config.FormatErrorMessage(chain)
@@ -102,7 +116,7 @@ func (f *container) Format(s fmt.State, verb rune) {
 	switch verb {
 	case 'v':
 		if s.Flag('+') {
-			u := Flatten(f)
+			u := f.config.Flatten(f)
 			for _, v := range u {
 				if v.Message != "" {
 					fmt.Fprintf(s, "%s\n", v.Message)

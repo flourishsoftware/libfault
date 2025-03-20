@@ -28,5 +28,5 @@ func Wrap(err error, wrappers ...Wrapper) error {
 
 // Flatten attempts to derive more useful structured information from an error chain
 func Flatten(err error) libfault.Chain {
-	return libfault.Flatten(err)
+	return fault.Flatten(err)
 }

@@ -2,6 +2,7 @@ package libfault
 
 import (
 	"errors"
+	"strings"
 )
 
 // Chain represents an unwound error chain. Each step is a useful error. Errors
@@ -20,7 +21,7 @@ type Step struct {
 // Flatten attempts to derive more useful structured information from an error
 // chain. If the input is a fault error, the output will contain an easy to use
 // error chain list with location information and individual error messages.
-func Flatten(err error) Chain {
+func (c *Config) Flatten(err error) Chain {
 	if err == nil {
 		return nil
 	}
@@ -69,11 +70,29 @@ func Flatten(err error) Chain {
 		default:
 			message := err.Error()
 
-			// de-duplicate identical error messages
-			if next != nil {
-				if message == next.Error() {
+			switch c.ChainDeduplicationMode {
+			case ChainMessageDeduplicationModeSubstringMatch:
+				// de-duplicate nested error messages
+				if next != nil {
+					if idx := strings.Index(message, next.Error()); idx != -1 {
+						// cut off the duplicate message and remove the separator.
+						message = strings.Trim(message[:idx], ": ")
+					}
+				}
+
+				// the entire error message was a duplicate, skip.
+				if message == "" {
 					continue
 				}
+
+			default:
+				// de-duplicate identical error messages
+				if next != nil {
+					if message == next.Error() {
+						continue
+					}
+				}
+
 			}
 
 			f = append([]Step{{
