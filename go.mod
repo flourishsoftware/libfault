@@ -1,6 +1,6 @@
 module github.com/josephbuchma/libfault
 
-go 1.18
+go 1.24
 
 require github.com/kr/pretty v0.3.1
 
