@@ -12,7 +12,7 @@ The API should be something like:
 package myerrors
 
 import (
-	"github.com/Southclaws/libfault"
+	"github.com/josephbuchma/libfault"
 )
 
 var fault = libfault.Config{

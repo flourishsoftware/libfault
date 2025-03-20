@@ -4,7 +4,7 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/Southclaws/libfault/fmsg"
+	"github.com/josephbuchma/libfault/fmsg"
 	"github.com/stretchr/testify/assert"
 )
 

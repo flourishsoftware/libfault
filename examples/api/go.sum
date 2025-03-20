@@ -1,5 +1,5 @@
-github.com/Southclaws/libfault v0.6.1 h1:bv/Zph2LxpeEB5HlujnmV7rfAmNHHnNikofi+rGf5RI=
-github.com/Southclaws/libfault v0.6.1/go.mod h1:VUVkAWutC59SL16s6FTqf3I6I2z77RmnaW5XRz4bLOE=
+github.com/josephbuchma/libfault v0.6.1 h1:bv/Zph2LxpeEB5HlujnmV7rfAmNHHnNikofi+rGf5RI=
+github.com/josephbuchma/libfault v0.6.1/go.mod h1:VUVkAWutC59SL16s6FTqf3I6I2z77RmnaW5XRz4bLOE=
 github.com/ajg/form v1.5.1 h1:t9c7v8JUKu/XxOGBU0yjNpaMloxGEJhUkqFRq0ibGeU=
 github.com/ajg/form v1.5.1/go.mod h1:uL1WgH+h2mgNtvBq0339dVnzXdBETtL2LeUXaIv25UY=
 github.com/go-chi/chi/v5 v5.0.8 h1:lD+NLqFcAi1ovnVZpsnObHGW4xb4J8lNmoYVfECH1Y0=
