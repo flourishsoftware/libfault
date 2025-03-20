@@ -87,6 +87,9 @@ type container struct {
 	config   *Fault
 }
 
+// IsFaultContainer is a marker method that identifies this as a fault container.
+func (f *container) IsFaultContainer() {}
+
 // Error behaves like most error wrapping libraries, it gives you all the error
 // messages conjoined with ": ". This is useful only for internal error reports,
 // never show this to an end-user or include it in responses as it may reveal

@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/josephbuchma/libfault/fmsg"
+	"github.com/josephbuchma/libfault/tests/internal/fault"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -25,9 +26,9 @@ func TestWithNone(t *testing.T) {
 func TestWithMany(t *testing.T) {
 	err := errors.New("the original problem")
 
-	err = fmsg.Wrap(err, "layer 1", "The post was not found.")
-	err = fmsg.Wrap(err, "layer 2", "Unable to reply to post.")
-	err = fmsg.Wrap(err, "layer 3", "Your reply draft has been saved however we could not publish it.")
+	err = fault.Wrap(err, fmsg.WithDesc("layer 1", "The post was not found."))
+	err = fault.Wrap(err, fmsg.WithDesc("layer 2", "Unable to reply to post."))
+	err = fault.Wrap(err, fmsg.WithDesc("layer 3", "Your reply draft has been saved however we could not publish it."))
 	out := fmsg.GetIssue(err)
 
 	assert.Equal(t, "Your reply draft has been saved however we could not publish it. Unable to reply to post. The post was not found.", out)
@@ -36,9 +37,9 @@ func TestWithMany(t *testing.T) {
 func TestWithManySlice(t *testing.T) {
 	err := errors.New("the original problem")
 
-	err = fmsg.Wrap(err, "layer 1", "The post was not found.")
-	err = fmsg.Wrap(err, "layer 2", "Unable to reply to post.")
-	err = fmsg.Wrap(err, "layer 3", "Your reply draft has been saved however we could not publish it.")
+	err = fault.Wrap(err, fmsg.WithDesc("layer 1", "The post was not found."))
+	err = fault.Wrap(err, fmsg.WithDesc("layer 2", "Unable to reply to post."))
+	err = fault.Wrap(err, fmsg.WithDesc("layer 3", "Your reply draft has been saved however we could not publish it."))
 	out := fmsg.GetIssues(err)
 
 	assert.Len(t, out, 3)
@@ -47,5 +48,5 @@ func TestWithManySlice(t *testing.T) {
 
 func TestInternalMessageFallback(t *testing.T) {
 	err := fmsg.Wrap(errors.New("underlying"), "", "External message.")
-	assert.Equal(t, "External message.", err.Error())
+	assert.Equal(t, "External message.: underlying", err.Error())
 }

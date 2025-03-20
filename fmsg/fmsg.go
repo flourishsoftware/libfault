@@ -21,9 +21,36 @@ type withMessage struct {
 // message is just the same as any error wrapping library but the external error
 // message is intended for display to the end-user. It's recommended to use full
 // punctuation and grammar and end the message with a period.
+// external will be used as internal if internal is an empty string.
 func Wrap(err error, internal, external string) error {
 	if err == nil {
 		return nil
+	}
+
+	var unwrapped = err
+	const limitJustInCase = 100
+	for range limitJustInCase {
+		// If we found the withMassage on top of the current container, just overwrite the messages.
+		if wmsg, ok := unwrapped.(*withMessage); ok {
+			if external != "" {
+				wmsg.external = external
+			}
+			if internal != "" {
+				wmsg.internal = internal
+			}
+			return err
+		}
+
+		unwrapped = errors.Unwrap(unwrapped)
+		if unwrapped == nil {
+			break
+		}
+
+		// If we reached the parent container - this is the first time
+		// message is added, so just wrap the error into withMessage.
+		if _, ok := unwrapped.(interface{ IsFaultContainer() }); ok {
+			break
+		}
 	}
 
 	return &withMessage{
