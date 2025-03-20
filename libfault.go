@@ -23,7 +23,7 @@ const (
 	ChainMessageDeduplicationModeSubstringMatch
 )
 
-// Fault allows customization of error formatting and location determination.
+// Fault allows customization of error formatting, location determination etc.
 type Fault struct {
 	// FormatErrorMessage allows customizing how error messages are formatted.
 	FormatErrorMessage func(chain Chain) string
@@ -31,6 +31,8 @@ type Fault struct {
 	// GetLocation overrides the default getLocation function.
 	GetLocation func(skipFramesDelta int) string
 
+	// ChainDeduplicationMode allows to select a strategy for messages deduplication in the Chain
+	// when building a final error message.
 	ChainDeduplicationMode ChainMessageDeduplicationMode
 }
 
