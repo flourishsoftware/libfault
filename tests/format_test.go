@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/josephbuchma/libfault/fctx"
-	"github.com/josephbuchma/libfault/ftag"
-	"github.com/josephbuchma/libfault/tests/internal/fault"
+	"github.com/flourishsoftware/libfault/fctx"
+	"github.com/flourishsoftware/libfault/ftag"
+	"github.com/flourishsoftware/libfault/tests/internal/fault"
 	"github.com/stretchr/testify/assert"
 )
 

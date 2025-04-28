@@ -1,4 +1,4 @@
-module github.com/josephbuchma/libfault
+module github.com/flourishsoftware/libfault
 
 go 1.24
 

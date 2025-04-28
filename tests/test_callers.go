@@ -1,8 +1,8 @@
 package tests
 
 import (
-	"github.com/josephbuchma/libfault/fmsg"
-	"github.com/josephbuchma/libfault/tests/internal/fault"
+	"github.com/flourishsoftware/libfault/fmsg"
+	"github.com/flourishsoftware/libfault/tests/internal/fault"
 )
 
 func errorCaller(kind int) error {

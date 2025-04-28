@@ -4,8 +4,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/josephbuchma/libfault/fmsg"
-	"github.com/josephbuchma/libfault/tests/internal/fault"
+	"github.com/flourishsoftware/libfault/fmsg"
+	"github.com/flourishsoftware/libfault/tests/internal/fault"
 	"github.com/stretchr/testify/assert"
 )
 

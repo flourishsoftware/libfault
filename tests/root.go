@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/josephbuchma/libfault/tests/internal/fault"
+	"github.com/flourishsoftware/libfault/tests/internal/fault"
 )
 
 // the root cause of errors for testing. All line numbers here should remain the

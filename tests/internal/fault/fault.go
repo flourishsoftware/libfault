@@ -1,7 +1,7 @@
 package fault
 
 import (
-	"github.com/josephbuchma/libfault"
+	"github.com/flourishsoftware/libfault"
 )
 
 var fault = libfault.Fault{

@@ -1,8 +1,8 @@
 ![header](./docs/header.png)
 
-[![GoDoc](https://pkg.go.dev/badge/github.com/josephbuchma/libfault)](https://pkg.go.dev/github.com/josephbuchma/libfault?tab=doc)
-[![Go Report Card](https://goreportcard.com/badge/github.com/josephbuchma/libfault)](https://goreportcard.com/report/github.com/josephbuchma/libfault)
-[![codecov](https://codecov.io/gh/josephbuchma/libfault/branch/main/graph/badge.svg?token=U06OABVKm3)](https://codecov.io/gh/josephbuchma/libfault)
+[![GoDoc](https://pkg.go.dev/badge/github.com/flourishsoftware/libfault)](https://pkg.go.dev/github.com/flourishsoftware/libfault?tab=doc)
+[![Go Report Card](https://goreportcard.com/badge/github.com/flourishsoftware/libfault)](https://goreportcard.com/report/github.com/flourishsoftware/libfault)
+[![codecov](https://codecov.io/gh/flourishsoftware/libfault/branch/main/graph/badge.svg?token=U06OABVKm3)](https://codecov.io/gh/flourishsoftware/libfault)
 
 Fault provides an extensible yet ergonomic mechanism for wrapping errors. It implements this as a kind of middleware style pattern of simple functions called **decorators**: `func(error) error`. A decorator simply wraps an error within another error, much like many libraries do.
 
@@ -39,10 +39,10 @@ What this gives you is basic stack traces. The philosophy behind stack traces pr
 
 ```
 stdlib sentinel error
-    /Users/josephbuchma/Work/fault/fault_test.go:34
+    /Users/flourishsoftware/Work/fault/fault_test.go:34
 failed to call function
-    /Users/josephbuchma/Work/fault/fault_test.go:43
-    /Users/josephbuchma/Work/fault/fault_test.go:52
+    /Users/flourishsoftware/Work/fault/fault_test.go:43
+    /Users/flourishsoftware/Work/fault/fault_test.go:52
 ```
 
 And of course all of this information is accessible in a structured way so you can serialise it how you want for your logging stack of choice. Fault aims to be unopinionated about presentation.
